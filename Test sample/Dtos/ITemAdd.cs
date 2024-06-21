@@ -1,6 +1,6 @@
 ﻿namespace Test_sample.Controller;
 
-public class AddITemDto
+public class ITemAdd
 {
     public class AddItemDto
     {

@@ -49,7 +49,7 @@ public class CharacterController : ControllerBase
 
 
     [HttpPost("{id}/backpacks")]
-    public async Task<IActionResult> AddItemsToBackpack(int id, [FromBody] List<AddITemDto.AddItemDto> items)
+    public async Task<IActionResult> AddItemsToBackpack(int id, [FromBody] List<ITemAdd.AddItemDto> items)
     {
 
         var character = await _dbService.RetrieveCharacterByiD(id);
@@ -72,7 +72,7 @@ public class CharacterController : ControllerBase
     
             scope.Complete();
         }
-        var backpackDtos = items.Select(item => new AddITemDto.BackpackDto
+        var backpackDtos = items.Select(item => new ITemAdd.BackpackDto
         {
             
             ItemId = item.ItemId,

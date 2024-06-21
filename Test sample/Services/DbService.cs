@@ -40,7 +40,7 @@ public class DbService
     {
         return await _testContext.Items.Where(i => ids.Contains(i.ItemsId)).ToListAsync();
     }
-    public async Task AddItemsToCharacter(int characterId, List<AddITemDto.AddItemDto> items)
+    public async Task AddItemsToCharacter(int characterId, List<ITemAdd.AddItemDto> items)
     {
         var character = await RetrieveCharacterByiD(characterId);
         if (character == null)
@@ -52,8 +52,8 @@ public class DbService
         var existingItems = await RetrieveItemsByIds(itemIds);
         
 
-        var weight = items.Sum(i => existingItems.First(ei => ei.ItemsId == i.ItemId).Weight * i.Amount);
-        var gotWeight = character.BackpacksCollection.Sum(b => b.Item.Weight * b.amount);
+        var weight = items.Sum(i => existingItems.First(d => d.ItemsId == i.ItemId).Weight * i.Amount);
+        var gotWeight = character.BackpacksCollection.Sum(i => i.Item.Weight * i.amount);
 
         if (gotWeight + weight > character.MaxWeight)
         {
@@ -61,7 +61,7 @@ public class DbService
         }
         foreach (var addItem in items)
         {
-            var backpackItem = character.BackpacksCollection.FirstOrDefault(b => b.ItemsId == addItem.ItemId);
+            var backpackItem = character.BackpacksCollection.FirstOrDefault(i => i.ItemsId == addItem.ItemId);
             if (backpackItem != null)
             {
                 backpackItem.amount += addItem.Amount;
