@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Transactions;
+using Microsoft.EntityFrameworkCore;
 using Test_sample.Controller;
 using Test_sample.Data;
 using Test_sample.Models;
@@ -14,7 +15,7 @@ public class DbService
         _testContext = testContext;
     }
     
-   public async Task<Character> RetrieveCharacterByiD(int id)
+   public async Task<Character?> RetrieveCharacterByiD(int id)
     {
      var character= await  _testContext.Characters
             .Include(e => e.BackpacksCollection)
@@ -35,7 +36,7 @@ public class DbService
         return character;
     }
 
-    public async Task<List<Item>> RetrieveItemsByIds(List<int> ids)
+    public async Task<List<Item?>> RetrieveItemsByIds(List<int> ids)
     {
         return await _testContext.Items.Where(i => ids.Contains(i.ItemsId)).ToListAsync();
     }
@@ -75,7 +76,7 @@ public class DbService
                 });
             }
         }
-
+        
         await _testContext.SaveChangesAsync();
     }
 

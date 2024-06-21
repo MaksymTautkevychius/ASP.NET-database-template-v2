@@ -1,4 +1,5 @@
 ﻿
+using System.Transactions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Test_sample.Data;
@@ -64,7 +65,13 @@ public class CharacterController : ControllerBase
             BadRequest("0 items");
             
         }
-        await _dbService.AddItemsToCharacter(id,items);
+
+        using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+        {
+            await _dbService.AddItemsToCharacter(id,items);
+    
+            scope.Complete();
+        }
         var backpackDtos = items.Select(item => new AddITemDto.BackpackDto
         {
             
@@ -72,6 +79,7 @@ public class CharacterController : ControllerBase
             Amount = item.Amount,
             CharacterId = id,
         }).ToList();
+      
         return Ok(backpackDtos);
     }
 }
